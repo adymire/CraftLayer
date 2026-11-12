@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "skill": "api-engineering",
+      "task": "A list endpoint returns every record and a client can request another organization's records by changing an ID.",
+      "expected": [
+        "Add bounded pagination",
+        "Enforce organization scope on the server",
+        "Define stable error behavior for unauthorized access",
+        "Add boundary and authorization tests"
+      ]
+    },
+    {
+      "skill": "database-engineering",
+      "task": "A migration makes a populated table column non-null while old application instances may remain active during deployment.",
+      "expected": [
+        "Plan a compatible staged rollout",
+        "Backfill and verify existing rows",
+        "Assess locks and rollback/forward recovery",
+        "Do not run destructive migration without approval"
+      ]
+    },
+    {
+      "skill": "authentication-and-rbac",
+      "task": "An organization-scoped API accepts organizationId from request body and checks role only in the frontend.",
+      "expected": [
+        "Derive trusted membership and tenant scope server-side",
+        "Deny by default and verify permissions per operation",
+        "Test cross-tenant access and revoked roles",
+        "Avoid treating hidden UI controls as security"
+      ]
+    },
+    {
+      "skill": "security-engineering",
+      "task": "A file upload endpoint trusts the extension and stores the original filename in a public directory.",
+      "expected": [
+        "Trace trust boundaries and identify realistic abuse cases",
+        "Validate content/size and choose safe storage naming and access",
+        "Avoid unsupported claims of complete security",
+        "Add focused regression tests"
+      ]
+    }
+  ]
+}

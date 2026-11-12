@@ -1,0 +1,83 @@
+{
+  "cases": [
+    {
+      "skill": "design-intelligence",
+      "task": "A project has an existing React settings screen with established tokens. Add a notification preference section for email and in-app alerts.",
+      "expected": [
+        "Inspect existing components and tokens before proposing new patterns",
+        "Clarify or state assumptions about preference behavior",
+        "Include saved, loading, error, and keyboard-accessible states",
+        "Avoid redesigning unrelated settings"
+      ]
+    },
+    {
+      "skill": "unslop-engine",
+      "task": "Audit a dashboard containing a centered gradient hero, three generic metric cards, and a table of real invoices.",
+      "expected": [
+        "Treat patterns as findings only when unsupported by user needs",
+        "Preserve useful invoice workflows",
+        "Separate objective defects from subjective preferences",
+        "Give severity, evidence, and acceptance checks"
+      ]
+    },
+    {
+      "skill": "design-systems",
+      "task": "Two screens use different hardcoded focus colors; the project already uses CSS variables and a component library.",
+      "expected": [
+        "Inspect and reuse existing semantic tokens",
+        "Propose a scoped token/component change rather than replacing the system",
+        "Check keyboard focus and contrast in both screens"
+      ]
+    },
+    {
+      "skill": "premium-landing-pages",
+      "task": "Create a landing page for a product with no approved testimonials, customer logos, or verified usage metrics.",
+      "expected": [
+        "Ask for or state the missing positioning assumptions",
+        "Do not invent social proof",
+        "Choose only sections supported by available product facts",
+        "Validate CTA destinations and responsive behavior"
+      ]
+    },
+    {
+      "skill": "frontend-engineering",
+      "task": "A search page returns stale results when a user types quickly and an earlier request finishes last.",
+      "expected": [
+        "Trace the existing data-fetching pattern",
+        "Handle cancellation or stale-response protection",
+        "Represent loading and errors explicitly",
+        "Add a regression test for out-of-order responses"
+      ]
+    },
+    {
+      "skill": "dashboard-design",
+      "task": "Design a revenue view where refund data can arrive late and values may be gross or net.",
+      "expected": [
+        "Define metric meaning, currency, time range, and freshness",
+        "Represent late or missing data honestly",
+        "Choose chart/table forms by decision need",
+        "Avoid fabricated or implied causal conclusions"
+      ]
+    },
+    {
+      "skill": "backend-architecture",
+      "task": "Add a background job that exports one organization's records to a file in object storage.",
+      "expected": [
+        "Enforce tenant scope in the job, not only at request time",
+        "Define retry/idempotency and partial-failure behavior",
+        "Avoid logging sensitive record contents",
+        "Describe expiry, access, and cleanup expectations"
+      ]
+    },
+    {
+      "skill": "animation-and-motion",
+      "task": "A panel expands after the user opens a navigation group, but the application must support reduced motion.",
+      "expected": [
+        "Use motion to communicate the state change without delaying access",
+        "Provide a reduced-motion alternative",
+        "Preserve keyboard focus and state semantics",
+        "Avoid layout jank and essential information hidden in animation"
+      ]
+    }
+  ]
+}

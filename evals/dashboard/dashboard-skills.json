@@ -1,0 +1,44 @@
+{
+  "cases": [
+    {
+      "skill": "saas-dashboard",
+      "task": "A first-time user has not connected any data source. Design the first dashboard state without inventing account metrics.",
+      "expected": [
+        "Show the current workspace/account context",
+        "Offer a concrete first-run action and explain its value",
+        "Avoid fake KPI values and irrelevant empty cards",
+        "Preserve access to optional or deferred setup"
+      ]
+    },
+    {
+      "skill": "admin-panel",
+      "task": "An organization admin needs to remove a member who owns several projects.",
+      "expected": [
+        "Identify organization scope and affected projects",
+        "Explain ownership transfer or blocking conditions",
+        "Require an appropriately scoped confirmation",
+        "Enforce permission on the server and audit the action"
+      ]
+    },
+    {
+      "skill": "super-admin-panel",
+      "task": "An operator needs to suspend a tenant during an active incident.",
+      "expected": [
+        "Verify tenant and environment before action",
+        "Require permission and capture reason",
+        "Explain impact and audit the operation",
+        "Provide a recovery or incident follow-up path"
+      ]
+    },
+    {
+      "skill": "analytics-and-data-visualization",
+      "task": "A chart compares conversion rates across regions with different sample sizes and missing days.",
+      "expected": [
+        "Show denominator/sample context where it changes interpretation",
+        "Represent missing days as missing, not zero",
+        "Label time period and units",
+        "Provide an accessible alternative to visual-only information"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "skill": "javascript-typescript",
+      "task": "A TypeScript CLI reads a port from an environment variable and currently casts the value directly to number.",
+      "expected": [
+        "Validate the string at runtime",
+        "Respect the project's module/runtime configuration",
+        "Return a clear error for invalid values",
+        "Add tests for valid and invalid boundaries"
+      ]
+    },
+    {
+      "skill": "python-engineering",
+      "task": "A Python utility reads a user-selected output path and launches a subprocess to convert a file.",
+      "expected": [
+        "Inspect supported Python versions and project tooling",
+        "Avoid shell command concatenation",
+        "Validate paths and report subprocess failures",
+        "Test with isolated temporary files"
+      ]
+    }
+  ]
+}

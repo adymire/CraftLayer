@@ -1,0 +1,24 @@
+{
+  "name": "craftlayer",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Practical AI-agent skills for design and software engineering",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "validate": "tsx packages/validation/src/cli.ts",
+    "test": "vitest run",
+    "test:javascript": "node --test skills/javascript-typescript/examples/port-config.test.mjs",
+    "test:python": "node scripts/test-python.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
