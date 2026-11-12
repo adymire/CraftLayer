@@ -1,0 +1,33 @@
+name: Skill proposal or improvement
+description: Propose a new skill or a concrete improvement to an existing one.
+title: "[Skill]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: What real task or recurring problem should this skill address?
+    validations:
+      required: true
+  - type: input
+    id: audience
+    attributes:
+      label: Intended users or agents
+      description: Who should benefit, and where should the skill work?
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed scope
+      description: What should the skill cover, and what should it explicitly not cover?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Example tasks or evidence
+      description: Share anonymized examples, failure modes, or evaluation ideas.
+  - type: textarea
+    id: references
+    attributes:
+      label: References and licensing
+      description: Link to official documentation or sources. Do not paste third-party material.

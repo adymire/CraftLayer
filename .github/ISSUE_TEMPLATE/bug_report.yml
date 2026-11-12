@@ -1,0 +1,41 @@
+name: Bug report
+description: Report a reproducible problem in CraftLayer content or tooling.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting, check whether the issue has already been reported.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the unexpected behavior and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include a minimal sequence, command, or skill task.
+      placeholder: |
+        1. Use ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: CraftLayer revision
+      description: Provide the commit SHA or branch when known.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include relevant OS, Node.js/pnpm/Python, and agent versions.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output
+      description: Remove secrets and personal information before posting.
