@@ -25,19 +25,18 @@ product and codebase before it changes anything. CraftLayer is designed to
 complement your framework, libraries, design system, and coding agent—not
 replace them.
 
-> **Project status:** The repository currently contains 35 skill drafts and
-> a tested agent-destination resolver. Skills can be copied into an agent's
-> documented skills folder and used manually. The `craftlayer` installer
-> command, remote downloader, and plugin packages are not implemented yet.
-> See [Implementation Status](Docs/IMPLEMENTATION-STATUS.md).
+> **Project status:** The repository contains 35 skill drafts and a tested
+> agent-destination resolver. Install skills directly from GitHub with the
+> commands below—no manual clone or global install is required. CraftLayer
+> does not yet publish its own `craftlayer` CLI or plugin package. See
+> [Implementation Status](Docs/IMPLEMENTATION-STATUS.md).
 
 ## Contents
 
 - [What CraftLayer helps with](#what-craftlayer-helps-with)
 - [Skill catalog](#skill-catalog)
-- [Use CraftLayer in a project](#use-craftlayer-in-a-project)
+- [Install without cloning the repository](#install-without-cloning-the-repository)
 - [Choose the right agent folder](#choose-the-right-agent-folder)
-- [Install a skill manually](#install-a-skill-manually)
 - [What works today](#what-works-today)
 - [Repository structure](#repository-structure)
 - [Develop and validate CraftLayer](#develop-and-validate-craftlayer)
@@ -93,66 +92,107 @@ the evaluation and release review required to call them published.
 
 Browse each skill's `SKILL.md` from the [catalog index](Docs/SKILL-CATALOG.md).
 
-## Use CraftLayer in a project
+## Install without cloning the repository
 
-### 1. Find the skill you need
-
-Choose a focused skill from the [catalog](Docs/SKILL-CATALOG.md). For
-example:
-
-- Planning a new product flow? Start with `design-intelligence`.
-- Reviewing a generic-looking interface? Use `unslop-engine`.
-- Building a dashboard? Combine `dashboard-design` with
-  `analytics-and-data-visualization` as needed.
-- Changing backend behavior? Consider `backend-architecture`,
-  `api-engineering`, or `python-engineering` based on the project.
-
-### 2. Copy it into your project
-
-Select the destination for the coding agent you use (see the table below),
-then copy the skill's whole directory there. Keep `SKILL.md` and any
-supporting files together.
-
-For example, from a clone of this repository, in **PowerShell**:
-
-```powershell
-$skill = "design-intelligence"
-$skillsFolder = ".agents/skills" # Codex or a generic Agent Skills tool
-$destination = Join-Path $skillsFolder $skill
-
-if (Test-Path $destination) {
-  throw "Skill already exists at $destination. Review it before replacing."
-}
-
-New-Item -ItemType Directory -Force -Path $skillsFolder | Out-Null
-Copy-Item -Recurse "skills/$skill" $destination
-```
-
-In **macOS/Linux** (Bash or a compatible shell):
+You do **not** need to clone CraftLayer or download its files manually.
+From the root of the project where you want the skill, run:
 
 ```bash
-skill="design-intelligence"
-skills_folder=".agents/skills" # Codex or a generic Agent Skills tool
-destination="$skills_folder/$skill"
-
-if [ -e "$destination" ]; then
-  echo "Skill already exists at $destination; review it before replacing." >&2
-  exit 1
-fi
-
-mkdir -p "$skills_folder"
-cp -R "skills/$skill" "$destination"
+npx skills add adymire/CraftLayer
 ```
 
-Replace `.agents/skills` with the appropriate path for your agent. These
-examples deliberately stop if the destination already exists; compare and
-merge changes instead of overwriting local customizations.
+The installer lets you choose which skills and agent to use. It fetches the
+selected skills from GitHub and installs them into the current project.
+`npx` runs the community-maintained Skills CLI for this command; you do not
+need to install CraftLayer or the CLI globally. The CLI may fetch the source
+repository into a temporary location while it works, but you do not clone
+the repository yourself or keep a CraftLayer checkout in your project.
+The Skills CLI requires Node.js 22.20 or newer.
 
-### 3. Ask your agent to use the skill
+### Install one skill for a specific agent
 
-Open the project in your coding agent and give it a task that matches the
-skill's description. You can also explicitly name the skill in your request,
-for example:
+Choose a skill ID from the [catalog](Docs/SKILL-CATALOG.md) and replace
+`design-intelligence` in the examples if needed:
+
+**OpenCode**
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --agent opencode --copy -y
+```
+
+**Claude Code**
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --agent claude-code --copy -y
+```
+
+**OpenAI Codex**
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --agent codex --copy -y
+```
+
+**Cursor**
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --agent cursor --copy -y
+```
+
+**Generic Agent Skills**
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --agent universal --copy -y
+```
+
+`--copy` creates regular files instead of symlinks. `-y` skips installer
+confirmation prompts; use it when the skill is not already installed.
+Omit `-y` if you want to review prompts or check how an existing skill will
+be handled.
+
+### Install multiple skills
+
+Pass `--skill` once per skill:
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --skill unslop-engine --skill accessibility --agent cursor --copy -y
+```
+
+### Install for your user account
+
+Add `--global` (or `-g`) to make a skill available across projects for your
+user instead of installing it into the current repository:
+
+```bash
+npx skills add adymire/CraftLayer --skill design-intelligence --agent cursor --global --copy -y
+```
+
+### Browse skills first
+
+```bash
+npx skills add adymire/CraftLayer --list
+```
+
+The CLI lists the 35 available skills and their descriptions without
+installing them. For all options, see the [Skills CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md#skills-add).
+
+### Update or remove installed skills
+
+The Skills CLI tracks project installs in `skills-lock.json`. You can use
+its commands later to check for changes, update skills, or remove a
+lock-tracked installation:
+
+```bash
+npx skills check
+npx skills update
+npx skills remove design-intelligence
+```
+
+These are commands from the external Skills CLI, not a CraftLayer CLI.
+
+### Use the installed skill
+
+Open the project in the selected coding agent and give it a task that
+matches the skill. For example:
 
 > Read the `design-intelligence` skill in this project, inspect the existing
 > app, then propose a plan for adding an accessible notification settings
@@ -165,10 +205,11 @@ documentation.
 
 ## Choose the right agent folder
 
-The project-level folders below are documented discovery locations as of
-the review noted in [Agent Compatibility](Docs/AGENT-COMPATIBILITY.md).
-Agent discovery behavior can change; consult the official links there if a
-skill is not detected.
+When using the install commands above, the Skills CLI selects the
+destination. For reference, these are the documented project and
+user-level skill locations. Paths can vary by installer and agent version;
+the links and review date are in
+[Agent Compatibility](Docs/AGENT-COMPATIBILITY.md).
 
 | Agent | Project skill folder | User/global skill folder |
 |---|---|---|
@@ -178,25 +219,40 @@ skill is not detected.
 | Cursor | `.cursor/skills/` | `~/.cursor/skills/` |
 | Generic Agent Skills | `.agents/skills/` | `~/.agents/skills/` |
 
-For global installation, copy a skill into the corresponding folder under
-your home directory. Global skills are available across projects for that
-user; project-level skills can be version-controlled with the project.
+Use `--global` rather than manually copying files when installing through
+the Skills CLI. Project-level installs can be version-controlled with your
+project; global installs apply to your user account.
 
 ### Skills are not plugins
 
-Today, CraftLayer provides canonical skill files and a small adapter
-package that resolves documented project/global destinations. It does **not**
-provide a CraftLayer plugin, marketplace listing, `npx craftlayer` command,
-remote install, update, or remove operation. Do not run or document those
-as available commands.
+CraftLayer provides canonical skill files and tested destination
+resolution. Installation is currently provided by the independent,
+open-source [`skills` CLI](https://github.com/vercel-labs/skills), not by a
+CraftLayer CLI. There is no `npx craftlayer` command or CraftLayer plugin
+marketplace listing.
 
-Where an agent offers a separate plugin or marketplace mechanism, that
-mechanism is distinct from discovering a `SKILL.md` directory. Plugin
-packaging may be considered later; for now, use the skill folder paths above.
+You do not need an agent plugin to use these skills. The installer places
+the `SKILL.md` files where your selected agent can discover them. Plugin
+packaging is a separate feature and is not currently provided by CraftLayer.
+
+The Skills CLI reports that it collects anonymous usage telemetry by
+default. To disable it:
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add adymire/CraftLayer --skill design-intelligence --agent cursor --copy -y
+```
+
+In PowerShell, set the variable for the command like this:
+
+```powershell
+$env:DISABLE_TELEMETRY = "1"
+npx skills add adymire/CraftLayer --skill design-intelligence --agent cursor --copy -y
+```
 
 ## What works today
 
-From the repository root, the following commands are implemented:
+From the repository root, the following development commands are
+implemented:
 
 | Command | Purpose |
 |---|---|
@@ -211,6 +267,9 @@ Agent destination resolution is implemented in
 [`packages/agent-adapters`](packages/agent-adapters/src/index.ts). It is a
 library used by the repository—not a user-facing installer command—and it
 does not write files.
+
+The GitHub install command is provided by the independent `skills` CLI
+documented above; it is not a CraftLayer package or command.
 
 ## Repository structure
 
