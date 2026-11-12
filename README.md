@@ -4,6 +4,8 @@
 
 ### Build with taste. Engineer with precision.
 
+> **Made by Adymire.com Team & Cybertron AI Team**
+
 **Practical skills for AI coding agents — from intentional product design to production-minded engineering.**
 
 [![CI](https://github.com/adymire/CraftLayer/actions/workflows/ci.yml/badge.svg)](https://github.com/adymire/CraftLayer/actions/workflows/ci.yml)
