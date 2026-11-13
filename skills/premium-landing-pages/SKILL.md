@@ -68,3 +68,9 @@ explains the product better.
 Verify content truthfulness, heading order, CTA destinations, form feedback,
 keyboard access, mobile reading order, metadata, image alternatives, and
 that each section supports the stated conversion goal.
+
+## Supporting guide
+
+Use the [landing-page content and proof guide](references/playbook.md) to
+build a page brief, map claims to evidence, and review conversion behavior
+before implementation.

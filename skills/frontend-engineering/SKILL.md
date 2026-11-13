@@ -56,12 +56,22 @@ type UserSummary = { id: string; displayName: string };
 async function loadUser(id: string): Promise<UserSummary> {
   const response = await fetch(`/api/users/${encodeURIComponent(id)}`);
   if (!response.ok) throw new Error(`User request failed: ${response.status}`);
-  return (await response.json()) as UserSummary;
+  const data: unknown = await response.json();
+  if (
+    typeof data !== "object" ||
+    data === null ||
+    !("id" in data) ||
+    typeof data.id !== "string" ||
+    !("displayName" in data) ||
+    typeof data.displayName !== "string"
+  ) {
+    throw new Error("User response has an invalid shape");
+  }
+  return { id: data.id, displayName: data.displayName };
 }
 ```
 
-In production, validate the response shape rather than trusting a TypeScript
-assertion; the snippet only illustrates an explicit failure path.
+Use the project's runtime schema library for larger response contracts.
 
 ## Common failures
 
@@ -75,3 +85,9 @@ assertion; the snippet only illustrates an explicit failure path.
 Check correct behavior for success and failure, request races where
 applicable, keyboard and screen-reader semantics, responsive states, type
 safety, and project-standard tests/build.
+
+## Supporting guide
+
+Use the [frontend execution guide](references/playbook.md) for a feature
+spanning data flow, async state, or multiple UI states; keep small changes
+within the established local pattern.

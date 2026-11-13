@@ -85,3 +85,9 @@ Check token references, representative component states, dark/light modes
 where supported, keyboard focus, contrast, responsive layout, and existing
 consumer regressions. Confirm docs explain usage rather than listing values
 alone.
+
+## Supporting guide
+
+Use the [token and component contract guide](references/playbook.md) when
+introducing shared primitives or planning a migration across multiple
+surfaces.

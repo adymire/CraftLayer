@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  claudeMarketplaceSchema,
+  claudePluginManifestSchema,
   skillFrontmatterSchema,
   skillRegistrySchema,
 } from "./schema.js";
@@ -28,6 +30,41 @@ describe("skill metadata schemas", () => {
         description: validEntry.description,
       }).success,
     ).toBe(true);
+  });
+
+  describe("Claude Code distribution schemas", () => {
+    it("accepts a root plugin and its same-repository marketplace entry", () => {
+      expect(
+        claudePluginManifestSchema.safeParse({
+          name: "craftlayer",
+          displayName: "CraftLayer",
+          version: "0.1.0",
+          description: "Design and engineering skills.",
+          author: { name: "CraftLayer" },
+          skills: ["./skills/design-intelligence"],
+        }).success,
+      ).toBe(true);
+      expect(
+        claudeMarketplaceSchema.safeParse({
+          name: "craftlayer",
+          owner: { name: "CraftLayer" },
+          plugins: [{ name: "craftlayer", source: "./" }],
+        }).success,
+      ).toBe(true);
+    });
+
+    it("rejects skill paths that escape or don't use the skill root", () => {
+      expect(
+        claudePluginManifestSchema.safeParse({
+          name: "craftlayer",
+          displayName: "CraftLayer",
+          version: "0.1.0",
+          description: "Design and engineering skills.",
+          author: { name: "CraftLayer" },
+          skills: ["../skills/design-intelligence"],
+        }).success,
+      ).toBe(false);
+    });
   });
 
   it("rejects invalid skill names and empty descriptions", () => {

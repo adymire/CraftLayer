@@ -72,3 +72,9 @@ Ensure the panel's state and content remain understandable without motion.
 Check reduced-motion behavior, keyboard focus, touch input, timing,
 performance, non-animated comprehension, and whether the motion supports a
 specific user task.
+
+## Supporting guide
+
+Use the [motion specification and review guide](references/playbook.md) when
+several transitions need consistent timing or when motion affects navigation,
+feedback, or layout.

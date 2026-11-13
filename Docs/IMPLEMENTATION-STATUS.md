@@ -24,6 +24,12 @@ Last updated: 2026-11-11
   Agent Skills.
 - Added executable JavaScript and Python examples with unit tests and CI
   checks for both runtimes.
+- Expanded the eight core skills with original domain-specific playbooks and
+  added a repeatable manual evaluation protocol.
+- Added a Claude Code plugin manifest and same-repository marketplace entry
+  exposing the core eight without duplicating their canonical skill files.
+- Extended validation to check plugin/marketplace consistency, registered
+  plugin skill paths, and local links from skills.
 
 ## Not implemented yet
 
@@ -31,6 +37,11 @@ Last updated: 2026-11-11
   content review, and source/license review; none are marked published.
 - The `craftlayer` CLI, GitHub downloader, and skill file installation,
   update, and removal do not exist yet.
+- The Claude Code plugin has not yet been checked with
+  `claude plugin validate` or installed from a marketplace; the Claude Code
+  CLI is not available in the current environment.
+- The eight core evaluation cases have not yet been run against an agent;
+  all skills remain drafts.
 - Themes, docs website, and release automation are not implemented.
 - Agent paths were checked against official docs; runtime compatibility has
   not yet been tested in each agent. Package-name availability has not been
@@ -40,17 +51,24 @@ Last updated: 2026-11-11
 
 ## Validation
 
-Validated with pnpm 11.25.0, Node.js 24, and Python 3.12:
+Validated with Node.js 24 and the repository's existing dependencies via
+Corepack/pnpm 11.25.0:
 
-- `pnpm validate` — passed; all 35 registered skill directories validate.
-- `pnpm test` — passed, 15 tests across 3 files.
-- `pnpm test:javascript` — passed, 2 tests.
-- `pnpm test:python` — passed, 3 tests.
-- `pnpm typecheck` — passed.
+- `corepack pnpm validate` — passed; all 35 registered skills and plugin
+  paths validate.
+- `corepack pnpm test` — passed, 20 tests across 3 files.
+- `corepack pnpm test:javascript` — passed, 2 tests.
+- `corepack pnpm test:python` — passed, 3 tests.
+- `corepack pnpm typecheck` — passed.
 - `git diff --check` — passed.
+
+The local `pnpm` shim itself points back to the shim; invoking the pinned
+version with `corepack pnpm` worked. Claude Code's native plugin validation
+was not run because the `claude` CLI is unavailable.
 
 ## Next milestone
 
-Evaluate and review the initial eight core skills, then implement the
-selective installer and theme engine. Test installation in fixture projects
-for all five documented agent targets.
+Run and document evaluations for the eight core skills, then use the
+Claude Code CLI to validate and install the plugin from the marketplace.
+After that, implement the selective installer and test it in fixture
+projects for the documented agent targets.

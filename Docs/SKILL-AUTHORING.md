@@ -41,8 +41,8 @@ Write the content under these headings as specific directions, not as empty
 section labels. Include relevant inputs and assumptions, a practical
 workflow, decision criteria, examples or patterns, common failure modes,
 and acceptance checks. Add supporting files only when they provide useful
-detail; link to them from the skill. Do not copy large shared sections
-between skills.
+detail; link to them from the skill. Relative links must resolve inside the
+skill's own directory. Do not copy large shared sections between skills.
 
 Skills should respect the user's existing project and avoid unapproved
 destructive changes. State uncertainty and distinguish requirements from

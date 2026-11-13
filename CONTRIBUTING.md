@@ -71,6 +71,9 @@ Use an appropriate branch prefix such as `docs/`, `skills/`, `fix/`, or
    benchmark claims.
 7. Leave a skill in `draft` until its content, evaluation, sources, and
    license have been reviewed.
+8. For the eight core skills, follow the human review steps in
+   [Skill Evaluation](Docs/SKILL-EVALUATION.md); do not claim a case passed
+   unless it was actually run.
 
 Do not mark a skill `published` just because the validator passes. The
 validator checks structure and consistency, not factual correctness,
@@ -151,7 +154,11 @@ changes as part of a contribution without explicit approval.
 
 CraftLayer follows semantic versioning for future releases. The release
 process is still planned; see the [roadmap](Docs/ROADMAP.md). No CLI
-installation or plugin-publishing workflow is currently available.
+installation command is provided by CraftLayer. Claude Code plugin
+marketplace metadata is included; run `claude plugin validate .` and test a
+marketplace install with the native Claude Code CLI before describing the
+plugin as runtime-verified. Increment `.claude-plugin/plugin.json`'s
+version whenever publishing a plugin update.
 
 ## License
 

@@ -1,9 +1,11 @@
 import type { Dirent } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
-import { ZodError } from "zod";
+import { ZodError, type ZodType } from "zod";
 import {
+  claudeMarketplaceSchema,
+  claudePluginManifestSchema,
   skillFrontmatterSchema,
   skillRegistrySchema,
   type SkillRegistry,
@@ -70,6 +72,53 @@ export async function validateRepository(
   const registeredSkills = new Map(
     registry.skills.map((skill) => [skill.id, skill]),
   );
+
+  const pluginManifestPath = path.join(
+    rootDirectory,
+    ".claude-plugin",
+    "plugin.json",
+  );
+  const marketplacePath = path.join(
+    rootDirectory,
+    ".claude-plugin",
+    "marketplace.json",
+  );
+  const pluginManifest = await readJsonFile(
+    pluginManifestPath,
+    ".claude-plugin/plugin.json",
+    errors,
+    claudePluginManifestSchema,
+  );
+  const marketplace = await readJsonFile(
+    marketplacePath,
+    ".claude-plugin/marketplace.json",
+    errors,
+    claudeMarketplaceSchema,
+  );
+  if (pluginManifest && marketplace) {
+    const marketplacePlugin = marketplace.plugins.find(
+      (plugin) => plugin.name === pluginManifest.name,
+    );
+    if (!marketplacePlugin) {
+      errors.push(
+        `.claude-plugin/marketplace.json: no plugin entry matches "${pluginManifest.name}"`,
+      );
+    }
+    for (const skillPath of pluginManifest.skills) {
+      const match = /^\.\/skills\/([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(skillPath);
+      if (!match) {
+        errors.push(
+          `.claude-plugin/plugin.json: invalid skill path "${skillPath}"`,
+        );
+        continue;
+      }
+      if (!registeredSkills.has(match[1])) {
+        errors.push(
+          `.claude-plugin/plugin.json: skill path "${skillPath}" is not registered`,
+        );
+      }
+    }
+  }
 
   for (const skill of registry.skills) {
     for (const dependency of skill.dependencies) {
@@ -159,6 +208,9 @@ export async function validateRepository(
         `skills/${skillId}/SKILL.md: must include non-empty "When to use", "When not to use", "Workflow", and "Validation" sections`,
       );
     }
+    errors.push(
+      ...(await validateLocalMarkdownLinks(skillFile, skillId, body)),
+    );
   }
 
   for (const skill of registry.skills) {
@@ -177,5 +229,101 @@ export async function validateRepository(
   return errors;
 }
 
-export { skillFrontmatterSchema, skillRegistrySchema };
+async function validateLocalMarkdownLinks(
+  skillFile: string,
+  skillId: string,
+  markdown: string,
+): Promise<string[]> {
+  const errors: string[] = [];
+  const skillDirectory = path.dirname(skillFile);
+  const linkPattern = /\[[^\]]+\]\(([^)]+)\)/g;
+
+  for (const match of markdown.matchAll(linkPattern)) {
+    const target = match[1].trim().split("#", 1)[0];
+    const isWindowsAbsolutePath = /^[a-z]:[\\/]/i.test(target);
+    if (
+      !target ||
+      target.startsWith("#") ||
+      (/^[a-z][a-z\d+.-]*:/i.test(target) && !isWindowsAbsolutePath)
+    ) {
+      continue;
+    }
+
+    if (path.isAbsolute(target) || path.win32.isAbsolute(target)) {
+      errors.push(
+        `skills/${skillId}/SKILL.md: local link escapes the skill directory: "${target}"`,
+      );
+      continue;
+    }
+
+    const targetPath = path.resolve(skillDirectory, target);
+    const relativePath = path.relative(skillDirectory, targetPath);
+    if (
+      relativePath === ".." ||
+      relativePath.startsWith(`..${path.sep}`) ||
+      path.isAbsolute(relativePath)
+    ) {
+      errors.push(
+        `skills/${skillId}/SKILL.md: local link escapes the skill directory: "${target}"`,
+      );
+      continue;
+    }
+
+    try {
+      await access(targetPath);
+    } catch (error) {
+      if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+        errors.push(
+          `skills/${skillId}/SKILL.md: local link target is missing: "${target}"`,
+        );
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  return errors;
+}
+
+async function readJsonFile<T>(
+  filePath: string,
+  displayPath: string,
+  errors: string[],
+  schema: ZodType<T>,
+): Promise<T | undefined> {
+  let contents: string;
+  try {
+    contents = await readFile(filePath, "utf8");
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+      errors.push(`${displayPath}: file is missing`);
+      return undefined;
+    }
+    throw error;
+  }
+
+  let value: unknown;
+  try {
+    value = JSON.parse(contents);
+  } catch (error) {
+    errors.push(
+      `${displayPath}: invalid JSON: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    return undefined;
+  }
+
+  const result = schema.safeParse(value);
+  if (!result.success) {
+    errors.push(`${displayPath}: ${formatZodError(result.error)}`);
+    return undefined;
+  }
+  return result.data;
+}
+
+export {
+  claudeMarketplaceSchema,
+  claudePluginManifestSchema,
+  skillFrontmatterSchema,
+  skillRegistrySchema,
+};
 export type { SkillFrontmatter, SkillRegistry, SkillRegistryEntry } from "./schema.js";

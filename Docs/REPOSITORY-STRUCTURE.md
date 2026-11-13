@@ -8,12 +8,13 @@ empty folders or placeholder documents.
 
 ```text
 .
+├── .claude-plugin/          Claude Code plugin and marketplace metadata
 ├── .github/workflows/       CI validation, tests, and type-check
 ├── Docs/                    Project, authoring, licensing, and catalog docs
 ├── packages/
 │   ├── agent-adapters/      Verified project/global destination resolution
 │   └── validation/          Registry and SKILL.md validator with tests
-├── skills/                  35 skill drafts and registry.json
+├── skills/                  35 skill drafts; core eight include playbooks
 ├── evals/                   Manual evaluation cases
 ├── rules/                   Shared quality standards
 ├── templates/               Skill and project-audit templates
@@ -33,10 +34,11 @@ runtime package is not required for this TypeScript-first repository.
 
 ## Planned only
 
-The CLI, GitHub installer, themes, automated evaluation runner, release
-automation, and website are not implemented. Create their package or app
-directories when implementing a concrete vertical slice, and add tests and
-documentation with that work.
+The CraftLayer CLI, GitHub installer, themes, automated evaluation runner,
+release automation, and website are not implemented. Claude Code plugin
+metadata exists, but the native CLI validation and install flow have not
+been exercised here. Create more package or app directories only when
+implementing a concrete vertical slice, with tests and documentation.
 
 ## Naming
 

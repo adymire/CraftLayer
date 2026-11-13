@@ -1,0 +1,33 @@
+{
+  "name": "craftlayer",
+  "owner": {
+    "name": "Adymire.com Team",
+    "url": "https://github.com/adymire"
+  },
+  "metadata": {
+    "description": "Practical skills for AI-assisted design and software engineering.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "craftlayer",
+      "source": "./",
+      "description": "Eight core design and engineering skills for Claude Code.",
+      "author": {
+        "name": "Adymire.com Team",
+        "url": "https://github.com/adymire"
+      },
+      "homepage": "https://github.com/adymire/CraftLayer",
+      "repository": "https://github.com/adymire/CraftLayer",
+      "license": "MIT",
+      "category": "development",
+      "tags": [
+        "design",
+        "frontend",
+        "backend",
+        "accessibility",
+        "agent-skills"
+      ]
+    }
+  ]
+}

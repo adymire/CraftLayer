@@ -25,17 +25,19 @@ product and codebase before it changes anything. CraftLayer is designed to
 complement your framework, libraries, design system, and coding agent—not
 replace them.
 
-> **Project status:** The repository contains 35 skill drafts and a tested
-> agent-destination resolver. Install skills directly from GitHub with the
-> commands below—no manual clone or global install is required. CraftLayer
-> does not yet publish its own `craftlayer` CLI or plugin package. See
-> [Implementation Status](Docs/IMPLEMENTATION-STATUS.md).
+> **Project status:** CraftLayer contains 35 skill drafts, including eight
+> expanded core skills with playbooks, plus a Claude Code marketplace
+> manifest for those eight. Install a skill through the community Skills CLI
+> or use the Claude Code plugin route below; neither requires a manual
+> CraftLayer clone. The Claude plugin has not yet been runtime-tested in this
+> environment. See [Implementation Status](Docs/IMPLEMENTATION-STATUS.md).
 
 ## Contents
 
 - [What CraftLayer helps with](#what-craftlayer-helps-with)
 - [Skill catalog](#skill-catalog)
 - [Install without cloning the repository](#install-without-cloning-the-repository)
+- [Install the Claude Code plugin](#install-the-claude-code-plugin)
 - [Choose the right agent folder](#choose-the-right-agent-folder)
 - [What works today](#what-works-today)
 - [Repository structure](#repository-structure)
@@ -175,6 +177,48 @@ npx skills add adymire/CraftLayer --list
 The CLI lists the 35 available skills and their descriptions without
 installing them. For all options, see the [Skills CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md#skills-add).
 
+## Install the Claude Code plugin
+
+The repository also includes a Claude Code marketplace and plugin manifest.
+It exposes the eight core skills as namespaced skills, for example
+`/craftlayer:design-intelligence`. This is separate from the Skills CLI: the
+Skills CLI can install individual skills from the full 35-skill catalog into
+several agents, while the Claude Code plugin installs the curated core eight
+as one plugin.
+
+Run these commands in a terminal with Claude Code installed:
+
+```bash
+claude plugin marketplace add adymire/CraftLayer
+claude plugin install craftlayer@craftlayer
+claude plugin list
+```
+
+In an active Claude Code session, the equivalent is:
+
+```text
+/plugin marketplace add adymire/CraftLayer
+/plugin install craftlayer@craftlayer
+```
+
+The in-session install opens the plugin details for review and scope
+selection. To install for just one repository from a terminal, add
+`--scope project`:
+
+```bash
+claude plugin install craftlayer@craftlayer --scope project
+```
+
+Start a new session or run `/reload-plugins` after a shell install. Review
+the plugin's component list before enabling it. For updates and removal, use
+`claude plugin update craftlayer` and `claude plugin uninstall craftlayer`;
+see the [official Claude Code plugin guide](https://code.claude.com/docs/en/plugins/install)
+for current behavior and scopes. These commands become available from the
+public repository once its plugin manifest and marketplace changes are
+published to GitHub. Maintainers must increment the plugin's `version` in
+`.claude-plugin/plugin.json` for each published release so Claude Code
+recognizes updates.
+
 ### Update or remove installed skills
 
 The Skills CLI tracks project installs in `skills-lock.json`. You can use
@@ -223,17 +267,19 @@ Use `--global` rather than manually copying files when installing through
 the Skills CLI. Project-level installs can be version-controlled with your
 project; global installs apply to your user account.
 
-### Skills are not plugins
+### Two distribution routes
 
-CraftLayer provides canonical skill files and tested destination
-resolution. Installation is currently provided by the independent,
-open-source [`skills` CLI](https://github.com/vercel-labs/skills), not by a
-CraftLayer CLI. There is no `npx craftlayer` command or CraftLayer plugin
-marketplace listing.
+The [Skills CLI](https://github.com/vercel-labs/skills) is an independent,
+open-source installer; CraftLayer does not publish an `npx craftlayer`
+command. The Claude Code plugin is installed and managed by Claude Code,
+not by CraftLayer's own CLI. Destination resolution in
+[`packages/agent-adapters`](packages/agent-adapters/src/index.ts) is a
+library and does not install files.
 
-You do not need an agent plugin to use these skills. The installer places
-the `SKILL.md` files where your selected agent can discover them. Plugin
-packaging is a separate feature and is not currently provided by CraftLayer.
+You do not need a Claude Code plugin to use the skills through the Skills
+CLI. Choose one route; avoid installing the same skill through both routes
+in the same Claude Code environment, because duplicate skill names can make
+discovery confusing.
 
 The Skills CLI reports that it collects anonymous usage telemetry by
 default. To disable it:
@@ -283,6 +329,7 @@ add empty skill/theme placeholders.
 │   ├── ISSUE_TEMPLATE/         Bug-report and skill-proposal forms
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── workflows/              CI for validation, tests, and type-checking
+├── .claude-plugin/              Claude Code plugin and marketplace manifests
 ├── Docs/                       Project documentation and master build brief
 ├── assets/                     Asset policy and registry
 ├── CODE_OF_CONDUCT.md          Community standards
@@ -293,7 +340,7 @@ add empty skill/theme placeholders.
 ├── references/                 Source research policy and registry
 ├── rules/                      Shared design, engineering, and safety rules
 ├── scripts/                    Cross-platform Python test launcher
-├── skills/                     Skill catalog and registry.json
+├── skills/                     Skill catalog; core skills include playbooks
 ├── templates/                  Skill and project-audit templates
 ├── CONTRIBUTING.md             Contribution workflow
 ├── LICENSE                     MIT license
@@ -331,10 +378,12 @@ launcher. If Python is installed in a non-standard location, set
 `pnpm test:python`.
 
 The validator checks that each registry entry maps to a skill directory,
-the frontmatter agrees with the registry, references resolve, and every
-skill has non-empty `When to use`, `When not to use`, `Workflow`, and
-`Validation` sections. This is a structural check—not a substitute for
-reviewing whether the advice is correct and useful.
+the frontmatter agrees with the registry, Claude plugin paths map to
+registered skills, local links in skills resolve, and every skill has
+non-empty `When to use`, `When not to use`, `Workflow`, and `Validation`
+sections. This is a structural check—not a substitute for evaluating
+whether the advice is correct and useful. The eight core evaluation cases
+are manual; CraftLayer has not yet completed a model-based evaluation run.
 
 ## Contributing
 

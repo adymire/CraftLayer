@@ -16,6 +16,10 @@ paths, fetch only selected content, stage it, and protect existing files.
 
 - **Canonical skills:** agent-neutral Markdown, with small adapter metadata
   transformations only when an agent requires them.
+- **Claude Code distribution:** root `.claude-plugin/` manifests expose the
+  first eight core skills without duplicating canonical content. The
+  marketplace source is the repository root; the plugin explicitly selects
+  skill directories.
 - **Registry:** versioned catalog metadata, dependencies, related skills,
   lifecycle status, license, and review date.
 - **CLI and installer (planned):** selection, fetching, safe staging, and
@@ -43,8 +47,10 @@ of the initial scope.
 ## Planned boundaries
 
 The CLI, GitHub downloader, and theme engine have not been implemented.
-Agent adapters currently resolve destinations but do not write files.
-Skill drafts have not yet passed representative human evaluation. Their
-requirements and sequence are tracked in the
-[roadmap](ROADMAP.md). Agent-specific paths and metadata conventions must be
-checked against current official documentation before support is claimed.
+Agent adapters currently resolve destinations but do not write files. The
+Claude Code plugin metadata is present but has not yet been validated or
+installed with the Claude Code CLI. Skill drafts have not yet passed
+Representative human evaluation. Their requirements and sequence are
+tracked in the [roadmap](ROADMAP.md). Agent-specific paths and metadata
+conventions must be checked against current official documentation before
+support is claimed.

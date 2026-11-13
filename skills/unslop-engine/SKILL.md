@@ -71,3 +71,9 @@ Report findings with affected component, severity, evidence, impact,
 objective/subjective classification, recommendation, and acceptance check.
 Verify that improvements retain functionality, responsive behavior,
 accessibility, product identity, and realistic content.
+
+## Supporting guide
+
+Use the [evidence-led audit guide](references/playbook.md) to structure a
+multi-screen review or to agree on severity and acceptance criteria before
+making visual changes.

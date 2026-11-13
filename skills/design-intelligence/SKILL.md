@@ -81,3 +81,9 @@ workspace.
   widths?
 - Do designs preserve the existing stack, brand, and functioning flows?
 - Does the summary distinguish verified facts from assumptions?
+
+## Supporting guide
+
+Use the [design brief and decision guide](references/playbook.md) when the
+task spans several screens, has significant unknowns, or needs approval
+before implementation.

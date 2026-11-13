@@ -68,3 +68,9 @@ the metric.
 Check metric definitions and calculations, filters, table controls, data
 freshness, permission states, keyboard and screen-reader descriptions,
 responsive density, and realistic empty/error cases.
+
+## Supporting guide
+
+Use the [dashboard metric and state guide](references/playbook.md) when
+defining KPIs, connecting filters to views, or handling late and partial
+data.

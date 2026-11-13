@@ -83,6 +83,37 @@ export const skillRegistrySchema = z
     });
   });
 
+export const claudePluginManifestSchema = z
+  .object({
+    name: slugSchema,
+    displayName: z.string().trim().min(1),
+    version: z.string().regex(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/),
+    description: z.string().trim().min(1),
+    author: z.object({ name: z.string().trim().min(1) }).passthrough(),
+    skills: z
+      .array(z.string().regex(/^\.\/skills\/[a-z0-9]+(?:-[a-z0-9]+)*$/)),
+  })
+  .passthrough();
+
+export const claudeMarketplaceSchema = z
+  .object({
+    name: slugSchema,
+    owner: z.object({ name: z.string().trim().min(1) }).passthrough(),
+    plugins: z
+      .array(
+        z
+          .object({
+            name: slugSchema,
+            source: z.literal("./"),
+          })
+          .passthrough(),
+      )
+      .min(1),
+  })
+  .passthrough();
+
 export type SkillFrontmatter = z.infer<typeof skillFrontmatterSchema>;
 export type SkillRegistryEntry = z.infer<typeof skillRegistryEntrySchema>;
 export type SkillRegistry = z.infer<typeof skillRegistrySchema>;
+export type ClaudePluginManifest = z.infer<typeof claudePluginManifestSchema>;
+export type ClaudeMarketplace = z.infer<typeof claudeMarketplaceSchema>;

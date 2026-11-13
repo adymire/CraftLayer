@@ -8,6 +8,11 @@ Do not treat the catalog as a published package or installable CLI.
 All skills are agent-neutral Markdown. Agent-specific install paths and
 frontmatter compatibility have not yet been verified.
 
+The eight core skills listed first below now include linked domain
+playbooks and review checklists. Their cases are still human-run and have
+not yet been completed; they remain drafts. See
+[Skill Evaluation](SKILL-EVALUATION.md) for the review protocol.
+
 ## Design and experience
 
 - [Design Intelligence](../skills/design-intelligence/SKILL.md)

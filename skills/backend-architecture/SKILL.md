@@ -78,3 +78,9 @@ do not expose internal stack traces to clients.
 Review data ownership, authorization, input boundaries, error behavior,
 timeouts, retry/idempotency, migration safety, tests, and operational
 visibility.
+
+## Supporting guide
+
+Use the [backend boundary and reliability guide](references/playbook.md)
+when the change crosses persistence, tenant boundaries, external services,
+or asynchronous work.
