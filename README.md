@@ -37,6 +37,7 @@ replace them.
 - [What CraftLayer helps with](#what-craftlayer-helps-with)
 - [Skill catalog](#skill-catalog)
 - [Install without cloning the repository](#install-without-cloning-the-repository)
+- [Use CraftLayer in VS Code with GitHub Copilot](#use-craftlayer-in-vs-code-with-github-copilot)
 - [Install the Claude Code plugin](#install-the-claude-code-plugin)
 - [Choose the right agent folder](#choose-the-right-agent-folder)
 - [What works today](#what-works-today)
@@ -64,9 +65,9 @@ maintainability, and preserving working behavior.
 ### Bring the workflow to the agent you use
 
 The canonical skill format is Markdown with Agent Skills-compatible
-`SKILL.md` frontmatter. Documented destinations are provided for OpenCode,
-Claude Code, OpenAI Codex, Cursor, and generic Agent Skills-compatible
-tools.
+`SKILL.md` frontmatter. Documented destinations are provided for GitHub
+Copilot, OpenCode, Claude Code, OpenAI Codex, Cursor, and generic Agent
+Skills-compatible tools.
 
 ### Use JavaScript, TypeScript, and Python where they fit
 
@@ -85,7 +86,7 @@ the evaluation and release review required to call them published.
 
 | Area | Skills |
 |---|---|
-| **Design and experience** | Design Intelligence, Unslop Engine, Design Systems, Visual Design, UX Research, Premium Landing Pages, Website Architecture, Responsive Design, Animation and Motion, Image Art Direction, Iconography |
+| **Design and experience** | Design Intelligence, Unslop Engine, Design Systems, Visual Design, UX Research, Premium Landing Pages, Website Architecture, Responsive Design, Animation and Motion, [...] |
 | **Frontend engineering** | Frontend Engineering, JavaScript/TypeScript Engineering, Component Engineering |
 | **Dashboards and administration** | Dashboard Design, SaaS Dashboard, Admin Panel, Super-admin Panel, Analytics and Data Visualization |
 | **AI products** | AI Dashboard, AI Chat Interface, AI Agent Interface, AI Engineering, RAG and Knowledge Systems |
@@ -109,7 +110,106 @@ selected skills from GitHub and installs them into the current project.
 need to install CraftLayer or the CLI globally. The CLI may fetch the source
 repository into a temporary location while it works, but you do not clone
 the repository yourself or keep a CraftLayer checkout in your project.
-The Skills CLI requires Node.js 22.20 or newer.
+The Skills CLI requires Node.js 22.20 or newer. For GitHub Copilot in VS
+Code, use the GitHub CLI workflow below, which installs skills into Copilot's
+project skill folder.
+
+## Use CraftLayer in VS Code with GitHub Copilot
+
+You can install CraftLayer skills directly into the project you have open in
+VS Code. This adds the selected skills under `.github/skills/` in your
+project root; you do not need to copy the whole CraftLayer repository into
+your app or add CraftLayer as a dependency.
+
+### 1. Open your project root in VS Code
+
+In VS Code, choose **File → Open Folder...** and open the root folder of the
+project where you want Copilot to use the skills. Then open the integrated
+terminal with **Terminal → New Terminal**. Confirm that the terminal is at
+your project root (the folder containing your app's `package.json`, solution
+file, or other top-level project files).
+
+### 2. Install GitHub CLI and sign in
+
+Install the [GitHub CLI (`gh`)](https://cli.github.com/) if it is not already
+available, then sign in and check that it works:
+
+```bash
+gh auth login
+gh --version
+```
+
+The `gh skill` command is GitHub CLI's skill installer. If your installed
+GitHub CLI does not recognize it, update GitHub CLI to a version that
+includes `gh skill`, then check `gh skill --help`.
+
+### 3. Install CraftLayer skills for Copilot
+
+To browse CraftLayer's available skills and choose what to install, run this
+in the VS Code terminal while it is at your project root:
+
+```bash
+gh skill install adymire/CraftLayer
+```
+
+To install a specific skill directly, use its skill ID from the
+[Skill Catalog](Docs/SKILL-CATALOG.md):
+
+```bash
+gh skill install adymire/CraftLayer design-intelligence
+```
+
+By default, GitHub CLI installs skills for Copilot at **project scope**. The
+result is a skill directory such as:
+
+```text
+your-project/
+└── .github/
+    └── skills/
+        └── design-intelligence/
+            └── SKILL.md
+```
+
+The catalog currently has 35 skill drafts. Use the interactive repository
+command to browse and install the skills you need, or install additional
+skills by running the specific-skill command once per skill ID. Installing
+one skill does not automatically install the entire catalog. To share the
+installed skills with your team, commit the resulting `.github/skills/`
+files to your project repository.
+
+### 4. Use and update skills
+
+Reopen or refresh the Copilot Chat/Agent session if it was already open when
+you installed skills. Ask Copilot for a task that matches the skill, for
+example:
+
+> Use the `design-intelligence` skill. First inspect this project's existing
+> UI and design system, then propose an accessible approach for a settings
+> page. Do not edit files until I approve the plan.
+
+Copilot chooses relevant skills based on the task and each skill's
+description; a skill does not need to be manually invoked on every request.
+To check for upstream changes or update installed skills, run:
+
+```bash
+gh skill update
+```
+
+To update every installed skill without prompting:
+
+```bash
+gh skill update --all
+```
+
+For exact options, version pinning, and current behavior, see GitHub's
+[Adding agent skills for GitHub Copilot](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills)
+documentation. Skill availability can depend on your VS Code and Copilot
+versions; see the [Copilot feature matrix](https://docs.github.com/en/copilot/reference/copilot-feature-matrix).
+
+> **Note:** CraftLayer contains one repository with a catalog of skills; it
+> does not currently provide a separate installer that installs every
+> CraftLayer repository at once. Run `gh skill install OWNER/REPOSITORY`
+> separately for each other skills repository you want to use.
 
 ### Install one skill for a specific agent
 
@@ -257,6 +357,7 @@ the links and review date are in
 
 | Agent | Project skill folder | User/global skill folder |
 |---|---|---|
+| GitHub Copilot | `.github/skills/` | `~/.copilot/skills/` or `~/.agents/skills/` |
 | OpenCode | `.opencode/skills/` | `~/.config/opencode/skills/` |
 | Claude Code | `.claude/skills/` | `~/.claude/skills/` |
 | OpenAI Codex | `.agents/skills/` | `~/.agents/skills/` |
